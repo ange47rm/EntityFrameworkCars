@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
 using System.Net;
 using System.Xml.Linq;
 
@@ -9,6 +10,13 @@ namespace EntityFrameworkCars
     {
         static void Main(string[] args)
         {
+            var context = new CarsDbContext();
+
+            var manufacturerTest = new CarManufacturer { Name = "Test", YearFounded = 1991 };
+
+            context.CarManufacturers.Add(manufacturerTest);
+
+            context.SaveChanges();
         }
 
         public class CarManufacturer
@@ -32,10 +40,9 @@ namespace EntityFrameworkCars
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-                if (!optionsBuilder.IsConfigured)
-                {
-                    optionsBuilder.UseSqlServer("Data Source=angelosdb.cd8qygawtti7.eu-west-2.rds.amazonaws.com;Database=postgres;User ID=postgres;Password=angelosdb;MultipleActiveResultSets=True");
-                }
+                var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+                optionsBuilder.UseNpgsql(connectionString);
             }
         }
     }

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "EntityFrameworkCars": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "CONNECTION_STRING": "Host=angelosdb.cd8qygawtti7.eu-west-2.rds.amazonaws.com;;Port=5432;Database=postgres;Username=postgres;Password=angelosdb"
+      }
+    }
+  }
+}
