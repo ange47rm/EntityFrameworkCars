@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EntityFrameworkCars.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCarModelAndCarManufacturersTables : Migration
+    public partial class AddTestMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,22 +33,34 @@ namespace EntityFrameworkCars.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    DateLaunched = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    DateLaunched = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CarManufacturerId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CarModels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarModels_CarManufacturers_CarManufacturerId",
+                        column: x => x.CarManufacturerId,
+                        principalTable: "CarManufacturers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarModels_CarManufacturerId",
+                table: "CarModels",
+                column: "CarManufacturerId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CarManufacturers");
+                name: "CarModels");
 
             migrationBuilder.DropTable(
-                name: "CarModels");
+                name: "CarManufacturers");
         }
     }
 }
